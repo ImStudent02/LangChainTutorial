@@ -12,8 +12,8 @@ import os
 # --- Load API key ---
 load_dotenv()  # reads .env file
 api_key_gemini = os.getenv("GEMINI_KEY")
-api_key_gorq = os.getenv("GORQ_KEY")
-
+#api_key_gorq = os.getenv("GORQ_KEY")
+api_key_gorq = st.secrets[GORQ_KEY]
 llm2 = ChatGroq(
     model="llama-3.1-8b-instant",
     api_key=api_key_gorq,
