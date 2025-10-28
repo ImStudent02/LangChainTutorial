@@ -12,13 +12,11 @@ import os
 # --- Load API key ---
 load_dotenv()  # reads .env file
 api_key_gemini = os.getenv("GEMINI_KEY")
-<<<<<<< HEAD
+
 api_key_gorq = os.getenv("GORQ_KEY")
 #api_key_gorq = st.secrets[GORQ_KEY]
-=======
-#api_key_gorq = os.getenv("GORQ_KEY")
-api_key_gorq = st.secrets[GORQ_KEY]
->>>>>>> a202bef4e65ca0abfb1ac30b89fa67b43f9908a2
+# --- Initialize LLM ---
+# Using Groq LLM here, you can use any other supported LLM
 llm2 = ChatGroq(
     model="llama-3.1-8b-instant",
     api_key=api_key_gorq,
@@ -30,7 +28,7 @@ prompt = PromptTemplate(
     input_variables=["cuisine"],
     template=(
         "Generate a creative restaurant concept for '{cuisine}' cuisine. "
-        "Return output as: RestaurantName, Slogan, MenuItem1, MenuItem2, MenuItem3.(coma separated values only). "
+        "Return output as: RestaurantName | Slogan | MenuItem1 | MenuItem2 | MenuItem3...(| separated values only max 5 menu items). "
     ),
 )
 
@@ -47,7 +45,7 @@ st.title("🍜 AI Restaurant Consltant")
 # ------------------------------
 cuisine = st.text_input(
     "Enter cuisine style:",
-    placeholder="e.g., Indian, Japanese, Italian"
+    placeholder="e.g., Indian, Japanese, Italian, Thai..."
 )
 
 # ------------------------------
@@ -75,7 +73,7 @@ if generate:
 
         # Parse response
         try:
-            parts = [x.strip() for x in response.split(",")]
+            parts = [x.strip() for x in response.split("|")]
             if len(parts) < 5:
                 raise ValueError("Expected at least 5 comma-separated values.")
 
